@@ -43,6 +43,5 @@ main() {
 	install_flutter
 	echo -e "${GREEN}安装完成，使用flutter doctor验证安装完整性...${NC}"
 }
-
 # 执行主线程
 main
