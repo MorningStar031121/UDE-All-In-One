@@ -29,11 +29,16 @@ install_flutter() {
     tar -xf /tmp/flutter.tar.xz -C "$FLUTTER_DIR" --strip-components=1
     rm -f /tmp/flutter.tar.xz
     echo -e "${GREEN}配置环境变量到 $TERMINAL_RC...${NC}"
-	cat <<EOT >> "$TERMINAL_RC"
-	export PUB_HOSTED_URL="https://pub.flutter-io.cn"
-	export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
-	export PATH="$FLUTTER_DIR/bin:\$PATH"
-	EOT
- 	echo -e "${GREEN}清理安装包...${NC}"
-  	rm /tmp/flutter
+    cat <<EOT >> "$TERMINAL_RC"
+    export PUB_HOSTED_URL="https://pub.flutter-io.cn"
+    export FLUTTER_STORAGE_BASE_URL="https://storage.flutter-io.cn"
+    export PATH="$FLUTTER_DIR/bin:\$PATH"
+    EOT
+    echo -e "${GREEN}清理安装包...${NC}"
+    rm /tmp/flutter
+    source "$TERMINAL_RC"
+}
+
+main() {
+	install_flutter
 }
