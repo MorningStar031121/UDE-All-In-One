@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
-# 全局配置(需与安装脚本保持一致)
-readonly FLUTTER_DIR="${HOME}/Flutter/FlutterSDK"
+# 全局配置
+readonly FLUTTER_DIR="${HOME}/Flutter"
 readonly ANDROID_SDK_DIR="${HOME}/android-sdk"
 readonly TERMINAL_RC="${HOME}/.bashrc"
 
@@ -23,8 +23,7 @@ uninstall_flutter() {
     echo -e "${GREEN}清理环境变量...${NC}"
     sed -i '/export PUB_HOSTED_URL=.*/d' "$TERMINAL_RC"
     sed -i '/export FLUTTER_STORAGE_BASE_URL=.*/d' "$TERMINAL_RC"
-    sed -i "s|export PATH=.*FlutterSDK/bin:\$PATH||" "$TERMINAL_RC"
-    sed -i '/^$/N;/^\n$/D' "$TERMINAL_RC"  # 删除空行
+    sed -i '/export PATH=.*FlutterSDK/d' "$TERMINAL_RC"
 }
 
 # 删除Android工具链
