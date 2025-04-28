@@ -54,11 +54,11 @@ install_flutter() {
         echo -e "export FLUTTER_STORAGE_BASE_URL=\"https://storage.flutter-io.cn\"" >> "$TERMINAL_RC"
     fi
     # 检查并添加PATH
-    if ! grep -qF "export PATH=\"${FLUTTER_DIR}/bin:\$PATH\"" "$TERMINAL_RC"; then
-        echo -e "export PATH=\"${FLUTTER_DIR}/bin:\$PATH\"" >> "$TERMINAL_RC"
+    if ! grep -qF "export PATH=\"${FLUTTER_DIR}/bin:\${PATH}\"" "$TERMINAL_RC"; then
+        echo -e "export PATH=\"${FLUTTER_DIR}/bin:\${PATH}\"" >> "$TERMINAL_RC"
     fi
 
-    echo -e "${GREEN}FlutterSDK安装完成,正在清理安装包...${NC}"
+    echo -e "${GREEN}FlutterSDK安装完成...${NC}"
 }
 
 # 桌面开发工具链
@@ -91,17 +91,11 @@ install_android_toolchain() {
         wget $CMDLINE_TOOLS
         unzip commandlinetools-linux-*.zip
         rm commandlinetools-linux-*.zip
+        mv ~/android-sdk/cmdline-tools/cmdline-tools/* ~/android-sdk/cmdline-tools/latest/
+        mv ~/android-sdk/cmdline-tools/cmdline-tools/.* ~/android-sdk/cmdline-tools/latest/ 2>/dev/null || true
+        rm -rf ~/android-sdk/cmdline-tools/cmdline-tools
         export ANDROID_HOME="${HOME}/android-sdk"
-        export PATH="${ANDROID_HOME}/cmdline-tools/latest/bin:\${PATH}"
-        export PATH="${ANDROID_HOME}/platform-tools:\${PATH}"
-        yes | sdkmanager --licenses
-        sdkmanager "cmdline-tools;latest"
-        cd ~/android-sdk/cmdline-tools
-        rm -rf latest
-        mv latest-2 latest
-        sdkmanager "build-tools;35.0.1"
-        sdkmanager "platform-tools"
-        sdkmanager "platforms;android-35"
+        export PATH="${ANDROID_HOME}/cmdline-tools/latest/bin:${PATH}"
 
         # 检查并写入 ANDROID_HOME
         if ! grep -qF "export ANDROID_HOME=\"${HOME}/android-sdk\"" "$TERMINAL_RC"; then
@@ -115,6 +109,13 @@ install_android_toolchain() {
         if ! grep -qF "export PATH=\"${ANDROID_HOME}/platform-tools:\${PATH}\"" "$TERMINAL_RC"; then
             echo -e "export PATH=\"${ANDROID_HOME}/platform-tools:\${PATH}\"" >> "$TERMINAL_RC"
         fi
+        sdkmanager "cmdline-tools;latest"
+        cd ~/android-sdk/cmdline-tools
+        rm -rf latest
+        mv latest-2 latest
+        sdkmanager "build-tools;35.0.1"
+        sdkmanager "platform-tools"
+        sdkmanager "platforms;android-35"
 
         ;;
       *)
